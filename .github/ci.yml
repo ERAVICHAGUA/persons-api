@@ -1,0 +1,31 @@
+name: CI - Type Check y Tests
+
+# Se activa en Pull Requests hacia main
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Type Check y Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Type checking
+        run: npm run typecheck
+
+      - name: Ejecutar pruebas unitarias
+        run: npm test

@@ -1,0 +1,53 @@
+name: Deploy a AWS
+
+# Se activa cuando llegan cambios a main
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy CDK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Instalar dependencias del proyecto
+        run: npm ci
+
+      - name: Type checking
+        run: npm run typecheck
+
+      - name: Ejecutar pruebas
+        run: npm test
+
+      - name: Compilar TypeScript
+        run: npm run build
+
+      - name: Instalar dependencias de infraestructura
+        working-directory: infrastructure
+        run: npm ci
+
+      - name: Configurar credenciales AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AKIAQZCUAJOPOFU4KHNN }}
+          aws-secret-access-key: ${{ secrets.umZp4pODnKnYh3ZnJIPf1kwPvwkzQ/rNVfqJWmB5 }}
+          aws-region: us-east-2
+
+      - name: CDK Bootstrap (primera vez)
+        working-directory: infrastructure
+        run: npx cdk bootstrap
+
+      - name: Deploy infraestructura
+        working-directory: infrastructure
+        run: npx cdk deploy --require-approval never
