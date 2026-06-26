@@ -107,6 +107,7 @@ export class InfrastructureStack extends cdk.Stack {
       code: lambda.Code.fromAsset(path.join(__dirname, "../../"), {
         bundling: {
           image: lambda.Runtime.NODEJS_20_X.bundlingImage,
+          user: "root",
           command: [
             "bash", "-c",
             "npm ci --omit=dev && cp -r node_modules /asset-output/nodejs/node_modules",
