@@ -1,0 +1,28 @@
+# Dependencias
+node_modules/
+
+# Compilado de TypeScript
+dist/
+
+# Variables de entorno (nunca subir credenciales)
+.env
+.env.local
+
+# CDK
+infrastructure/node_modules/
+infrastructure/dist/
+infrastructure/cdk.out/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.suo
+*.user
